@@ -1,20 +1,61 @@
 //import React from "react"
-import { MARCAS } from "../constants/index"
-
+import { Fragment } from "react"
+import { YEARS, PLANES, MARCAS } from "../constants/index"
+//import { CotizadorProvider } from "../context/CotizadorProvider"
+import useCotizador from "../hooks/useCotizador"
+import Error from "./Error"
+//MARCAS
 const Formulario = () => {
+
+    const { datos, handleChangeDatos, error,
+        setError, cotizarSeguro } = useCotizador()
+
+    const handleSubmit = e => {
+        e.preventDefault()
+
+
+        if (Object.values(datos).includes('')) {
+            setError("Todos los campos son obligatorios")
+            return
+        }
+
+        /**, useContext
+         * hola, fnHolaMundo 
+        fnHolaMundo()
+        setModal
+        useContext(CotizadorProvider)
+        */
+        setError('')
+        cotizarSeguro()
+    }
+    //const { modal, cambiarState } = useCotizador()
+    //console.log(modal)
+    /**
+                <button
+                    onClick={cambiarState}
+                >
+                    Cambiar Modal de Context
+                </button> */
+    /**() => (true)*/
     return (
         <>
-            <form>
+            {error && <Error />}
+            <form
+                onSubmit={handleSubmit}
+            >
                 <div className="my-5">
                     <label className="block mb-3 font-bold text-gray-400
                     uppercase">
-                        Año
+                        Marca
                     </label>
                     <select
                         name="marca"
                         className="w-full p-3 bg-white border
-                    border-gray-200">
-                        <option value="">-- Selecciona Año --</option>
+                    border-gray-200"
+                        value={datos.marca}
+                        onChange={e => handleChangeDatos(e)}
+                    >
+                        <option value="">-- Selecciona Marca --</option>
                         {MARCAS.map(marca => {
                             <option
                                 key={marca.id}
@@ -25,9 +66,62 @@ const Formulario = () => {
                         })}
                     </select>
                 </div>
+
+                <div className="my-5">
+                    <label className="block mb-3 font-bold text-gray-400
+                    uppercase">
+                        Año
+                    </label>
+                    <select
+                        name="year"
+                        className="w-full p-3 bg-white border
+                    border-gray-200"
+                        value={datos.year}
+                        onChange={e => handleChangeDatos(e)}
+                    >
+                        <option value="">-- Selecciona Año --</option>
+                        {YEARS.map(year => {
+                            <option
+                                key={year}
+                                value={year}
+                            >
+                                {year}
+                            </option>
+                        })}
+                    </select>
+                </div>
+
+                <div className="my-5">
+                    <label className="block mb-3 font-bold text-gray-400
+                    uppercase">
+                        Elige un Plan
+                    </label>
+                    <div className="flex gap-3 items-center">
+                        {PLANES.map(plan => {
+                            <Fragment key={plan.id}>
+                                <label>
+                                    {plan.nombre}
+                                </label>
+                                <input
+                                    type="radio"
+                                    name="plan"
+                                    value={plan.id}
+                                    onChange={e => handleChangeDatos(e)} />
+                            </Fragment>
+                        })}
+                    </div>
+                </div>
+
+                <input
+                    type="submit"
+                    className="w-full bg-indigo-500 hover:bg-indigo-600
+                    transition-colors text-white cursor-pointer p-3 
+                    uppercase font-bold"
+                    value="Cotizar"
+                />
             </form>
         </>
     )
 }
-
+//troco marca por year
 export default Formulario
