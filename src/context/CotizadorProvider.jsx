@@ -1,13 +1,12 @@
-import { useState, createContext } from 'react';
+import React, { useState, createContext } from 'react';
 import {
     calcularMarca, obtenerDiferenciaYear,
     calcularPlan, formatearDinero
-} from '../helpers';
+} from '../helpers'; // Asegúrate de importar las funciones correctamente
 
 const CotizadorContext = createContext();
 
 const CotizadorProvider = ({ children }) => {
-
     const [datos, setDatos] = useState({
         marca: '',
         year: '',
@@ -25,12 +24,28 @@ const CotizadorProvider = ({ children }) => {
         });
     };
 
+    // Función para obtener la diferencia en años entre el año actual y el año proporcionado
+    /*   export function obtenerDiferenciaYear = (year, callback) => {
+           const currentYear = new Date().getFullYear();
+           const diferencia = currentYear - parseInt(year, 10);
+           return callback ? callback(diferencia) : diferencia;
+       };
+    */// Función flecha para obtener la diferencia en años entre el año actual y el año proporcionado
+    /*    const obtenerDiferenciaYear = (year) => {
+            const currentYear = new Date().getFullYear();
+            const diferencia = currentYear - parseInt(year, 10);
+            return diferencia;
+        };
+        obtenerDiferenciaYear()
+    */
+
     const cotizarSeguro = () => {
         let resultado = 2000;
 
-        const diferencia = obtenerDiferenciaYear(datos.year);
-
-        resultado -= ((diferencia * 3) * resultado) / 100;
+        /*const diferencia = obtenerDiferenciaYear(datos.year);
+    
+        resultado -= ((diferencia * 3) * resultado) / 100;*/
+        resultado = obtenerDiferenciaYear(datos.year);
 
         resultado *= calcularMarca(datos.marca);
 
@@ -63,9 +78,7 @@ const CotizadorProvider = ({ children }) => {
     );
 };
 
-export {
-    CotizadorProvider
-};
+export { CotizadorProvider };
 export default CotizadorContext;
 
 
